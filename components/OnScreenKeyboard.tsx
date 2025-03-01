@@ -16,13 +16,13 @@ type OnScreenKeyboardProps = {
   grayLetters: string[];
 };
 
-export const ENTER = "ENTER";
+export const DONE = "DONE";
 export const BACKSPACE = "BACKSPACE";
 
 const keys = [
   ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
   ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-  [ENTER, "z", "x", "c", "v", "b", "n", "m", BACKSPACE],
+  [DONE, "z", "x", "c", "v", "b", "n", "m", BACKSPACE],
 ];
 
 const OnScreenKeyboard = ({
@@ -35,7 +35,7 @@ const OnScreenKeyboard = ({
   const keyWidth = Platform.OS === "web" ? 58 : (width - 60) / keys[0].length;
   const keyHeight = 60;
 
-  const isSpecialKey = (key: string) => key === ENTER || key === BACKSPACE;
+  const isSpecialKey = (key: string) => key === DONE || key === BACKSPACE;
 
   const isInLetters = (key: string) =>
     [...greenLetters, ...yellowLetters, ...grayLetters].includes(key);
@@ -67,13 +67,13 @@ const OnScreenKeyboard = ({
               <Text
                 style={[
                   styles.keyText,
-                  key === "ENTER" && { fontSize: 12 },
+                  key === "DONE" && { fontSize: 12 },
                   isInLetters(key) && { color: "#fff" },
                 ]}
               >
                 {isSpecialKey(key) ? (
-                  key === ENTER ? (
-                    "ENTER"
+                  key === DONE ? (
+                    "DONE"
                   ) : (
                     <Ionicons
                       name="backspace-outline"

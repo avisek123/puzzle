@@ -1,6 +1,6 @@
 import OnScreenKeyboard, {
   BACKSPACE,
-  ENTER,
+  DONE,
 } from "@/components/OnScreenKeyboard";
 import SettingsModal from "@/components/SettingsModal";
 import { Colors } from "@/constants/Colors";
@@ -27,7 +27,7 @@ import Animated, {
   ZoomIn,
 } from "react-native-reanimated";
 
-const ROWS = 1;
+const ROWS = 6;
 
 const Page = () => {
   const [word, setWord] = useState(
@@ -72,7 +72,7 @@ const Page = () => {
 
     const newRows = [...rows.map((row) => [...row])];
 
-    if (key === "ENTER") {
+    if (key === "DONE") {
       checkWord();
     } else if (key === "BACKSPACE") {
       if (colStateRef.current === 0) {
@@ -150,7 +150,7 @@ const Page = () => {
   useEffect(() => {
     const handleKeyDown = (e: any) => {
       if (e.key === "Enter") {
-        addKey(ENTER);
+        addKey(DONE);
       } else if (e.key === "Backspace") {
         addKey(BACKSPACE);
       } else if (e.key.length === 1) {
@@ -293,7 +293,7 @@ const Page = () => {
   console.log("settingsModalRef", settingsModalRef?.current);
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      {/* <SettingsModal ref={settingsModalRef} /> */}
+      <SettingsModal ref={settingsModalRef} />
       <Stack.Screen
         options={{
           headerRight: () => (

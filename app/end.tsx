@@ -184,11 +184,6 @@ const Page = () => {
             backgroundColor: "#4e4e4e",
           }}
         />
-
-        <TouchableOpacity style={styles.iconBtn} onPress={shareGame}>
-          <Text style={styles.btnText}>Share</Text>
-          <Ionicons name="share-social" size={24} color="#fff" />
-        </TouchableOpacity>
       </View>
     </View>
   );

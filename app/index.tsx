@@ -12,22 +12,31 @@ import { Colors } from "@/constants/Colors";
 import ThemedText from "@/components/ThemedText";
 import { Link } from "expo-router";
 
-import { SignedIn, SignedOut, useAuth } from "@clerk/clerk-expo";
+import { SignedIn, SignedOut, useAuth, useUser } from "@clerk/clerk-expo";
 import Animated, {
   FadeIn,
   FadeInDown,
   FadeInLeft,
 } from "react-native-reanimated";
+import { useRef } from "react";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import LoginModal from "@/components/LoginModal";
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
 
 export default function Index() {
+  const { user } = useUser();
   const colorScheme = useColorScheme();
+  const loginModalRef = useRef<BottomSheetModal>(null);
   const backgroundColor = Colors[colorScheme ?? "light"].background;
   const textColor = Colors[colorScheme ?? "light"].text;
   const { signOut } = useAuth();
   const { width } = useWindowDimensions();
+
+  const handlePresentSubscribeModalPress = () => {
+    loginModalRef.current?.present();
+  };
 
   return (
     <Animated.View style={[styles.container, { backgroundColor }]}>
@@ -35,7 +44,7 @@ export default function Index() {
         <Icon width={100} height={70} />
         <ThemedText style={styles.title}>Puzzle Word</ThemedText>
         <ThemedText style={styles.text}>
-          Get 6 chances to guess a 5-letter word.
+          Crack the word in 6 attempts—can you do it?
         </ThemedText>
       </Animated.View>
 
@@ -54,16 +63,15 @@ export default function Index() {
             <Text style={[styles.btnText, styles.primaryText]}>Play</Text>
           </AnimatedTouchableOpacity>
         </Link>
+
         <SignedOut>
-          <Link
-            href={"/login"}
+          <AnimatedTouchableOpacity
+            onPress={handlePresentSubscribeModalPress}
             style={[styles.btn, { borderColor: textColor }]}
-            asChild
+            entering={FadeInLeft.delay(100)}
           >
-            <AnimatedTouchableOpacity entering={FadeInLeft.delay(100)}>
-              <ThemedText style={styles.btnText}>Log in</ThemedText>
-            </AnimatedTouchableOpacity>
-          </Link>
+            <ThemedText style={styles.btnText}>Log in</ThemedText>
+          </AnimatedTouchableOpacity>
         </SignedOut>
 
         <SignedIn>
@@ -79,11 +87,15 @@ export default function Index() {
 
       <Animated.View style={styles.footer} entering={FadeIn.delay(300)}>
         <ThemedText style={styles.footerDate}>
-          {format(new Date(), "MMMM d, yyyy")}
+          {user?.primaryEmailAddress?.emailAddress}
         </ThemedText>
 
-        <ThemedText style={styles.footerText}>Made by Avisek</ThemedText>
+        <ThemedText style={styles.footerText}>
+          {format(new Date(), "MMMM d, yyyy")}
+        </ThemedText>
       </Animated.View>
+
+      <LoginModal ref={loginModalRef} />
     </Animated.View>
   );
 }
