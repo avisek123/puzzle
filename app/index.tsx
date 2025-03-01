@@ -80,7 +80,7 @@ export default function Index() {
             entering={FadeInLeft.delay(100)}
             style={[styles.btn, { borderColor: textColor }]}
           >
-            <ThemedText style={styles.btnText}>Sign out</ThemedText>
+            <ThemedText style={styles.btnText}>Log out</ThemedText>
           </AnimatedTouchableOpacity>
         </SignedIn>
       </View>
