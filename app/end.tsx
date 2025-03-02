@@ -151,12 +151,6 @@ const Page = () => {
               <Text style={styles.btnText}>Create a free account</Text>
             </TouchableOpacity>
           </Link>
-
-          <Link href={"/login"} asChild>
-            <TouchableOpacity>
-              <Text style={styles.textLink}>Already Registered? Log In</Text>
-            </TouchableOpacity>
-          </Link>
         </SignedOut>
 
         <SignedIn>
@@ -184,6 +178,15 @@ const Page = () => {
             backgroundColor: "#4e4e4e",
           }}
         />
+        {/* <SignedIn>
+         
+            <TouchableOpacity
+          
+            >
+              <Text style={styles.btnText}>Play Again!</Text>
+            </TouchableOpacity>
+
+        </SignedIn> */}
       </View>
     </View>
   );

@@ -5,6 +5,8 @@ import {
   TouchableOpacity,
   useColorScheme,
   useWindowDimensions,
+  Linking,
+  ActivityIndicator,
 } from "react-native";
 import Icon from "@/assets/images/puzzle-icon.svg";
 import { format } from "date-fns";
@@ -12,31 +14,54 @@ import { Colors } from "@/constants/Colors";
 import ThemedText from "@/components/ThemedText";
 import { Link } from "expo-router";
 
-import { SignedIn, SignedOut, useAuth, useUser } from "@clerk/clerk-expo";
+import {
+  SignedIn,
+  SignedOut,
+  useAuth,
+  useSSO,
+  useUser,
+} from "@clerk/clerk-expo";
 import Animated, {
   FadeIn,
   FadeInDown,
   FadeInLeft,
 } from "react-native-reanimated";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import LoginModal from "@/components/LoginModal";
-
+import * as WebBrowser from "expo-web-browser";
+import * as AuthSession from "expo-auth-session";
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
 
 export default function Index() {
   const { user } = useUser();
+  const { isLoaded, isSignedIn, signOut } = useAuth();
+
+  const [isSessionReady, setIsSessionReady] = useState(false);
+
   const colorScheme = useColorScheme();
   const loginModalRef = useRef<BottomSheetModal>(null);
   const backgroundColor = Colors[colorScheme ?? "light"].background;
   const textColor = Colors[colorScheme ?? "light"].text;
-  const { signOut } = useAuth();
+
   const { width } = useWindowDimensions();
 
   const handlePresentSubscribeModalPress = () => {
     loginModalRef.current?.present();
   };
+
+  useEffect(() => {
+    if (isLoaded) {
+      setTimeout(() => {
+        setIsSessionReady(true);
+      }, 2000); // Adding a 1-second delay to ensure the session syncs properly
+    }
+  }, [isLoaded]);
+
+  if (!isLoaded || !isSessionReady) {
+    return <ActivityIndicator size="large" color="#000" />;
+  }
 
   return (
     <Animated.View style={[styles.container, { backgroundColor }]}>

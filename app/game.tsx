@@ -290,7 +290,7 @@ const Page = () => {
       setBorderColor(cell, curRow - 1, cellIndex);
     });
   }, [curRow]);
-  console.log("settingsModalRef", settingsModalRef?.current);
+
   return (
     <View style={[styles.container, { backgroundColor }]}>
       <SettingsModal ref={settingsModalRef} />

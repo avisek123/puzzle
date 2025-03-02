@@ -11,6 +11,7 @@ export type Ref = BottomSheetModal;
 import * as WebBrowser from "expo-web-browser";
 import * as AuthSession from "expo-auth-session";
 import { useSSO } from "@clerk/clerk-expo";
+import { router } from "expo-router";
 export const useWarmUpBrowser = () => {
   useEffect(() => {
     // Warm up the android browser to improve UX
@@ -35,13 +36,13 @@ const LoginModal = forwardRef<Ref>((props, ref) => {
     try {
       const response = await startSSOFlow({
         strategy: "oauth_google",
-        redirectUrl: AuthSession.makeRedirectUri(),
       });
 
       const { createdSessionId, setActive } = response;
 
       if (createdSessionId) {
         setActive!({ session: createdSessionId });
+        // router.push("/game");
       } else {
         console.log("HELLO NOT WORKING");
       }

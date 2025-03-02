@@ -7,6 +7,7 @@ const createTokenCache = (): TokenCache => {
     getToken: async (key: string) => {
       try {
         const item = await SecureStore.getItemAsync(key);
+
         if (item) {
           console.log(`${key} was used 🔐 \n`);
         } else {

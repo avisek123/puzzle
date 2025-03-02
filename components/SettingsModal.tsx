@@ -7,17 +7,21 @@ import {
   useBottomSheetModal,
 } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
-import { Colors } from "@/constants/Colors";
-import { useDarkMode } from "@/app/_layout"; // Import the dark mode context
-
 export type Ref = BottomSheetModal;
+import { Colors } from "@/constants/Colors";
+import { useMMKVBoolean } from "react-native-mmkv";
+import { storage } from "@/utils/storage";
 
 const SettingsModal = forwardRef<Ref>((props, ref) => {
-  const snapPoints = useMemo(() => ["50%"], []);
+  const snapPoints = useMemo(() => ["30%"], []);
   const { dismiss } = useBottomSheetModal();
+  const [dark, setDark] = useMMKVBoolean("dark-mode", storage);
+  const [hard, setHard] = useMMKVBoolean("hard-mode", storage);
+  const [contrast, setContrast] = useMMKVBoolean("contrast-mode", storage);
 
-  // Use dark mode context
-  const { darkMode, toggleDarkMode } = useDarkMode();
+  const toggleDark = () => setDark((prev) => !!!prev);
+  const toggleHard = () => setHard((prev) => !!!prev);
+  const toggleContrast = () => setContrast((prev) => !!!prev);
 
   const renderBackdrop = useCallback(
     (props: any) => (
@@ -41,26 +45,42 @@ const SettingsModal = forwardRef<Ref>((props, ref) => {
       handleComponent={null}
     >
       <BottomSheetView style={styles.contentContainer}>
-        <View style={styles.modalBtns}>
-          <Text style={styles.containerHeadline}>SETTINGS</Text>
-          <TouchableOpacity onPress={() => dismiss()}>
-            <Ionicons name="close" size={28} color={Colors.light.gray} />
-          </TouchableOpacity>
-        </View>
-        <View>
-          <View style={styles.row}>
-            <View style={styles.rowText}>
-              <Text style={styles.rowTextBig}>Dark Mode</Text>
-              <Text style={styles.rowTextSmall}>
-                Change the app to dark mode
-              </Text>
+        <View style={styles.contentContainer}>
+          <View style={styles.modalBtns}>
+            <Text style={styles.containerHeadline}>SETTINGS</Text>
+            <TouchableOpacity onPress={() => dismiss()}>
+              <Ionicons name="close" size={28} color={Colors.light.gray} />
+            </TouchableOpacity>
+          </View>
+          <View>
+            <View style={styles.row}>
+              <View style={styles.rowText}>
+                <Text style={styles.rowTextBig}>Hard Mode</Text>
+                <Text style={styles.rowTextSmall}>
+                  Words are longer and harder
+                </Text>
+              </View>
+              <Switch
+                onValueChange={toggleHard}
+                value={hard}
+                trackColor={{ true: "#000" }}
+                ios_backgroundColor="#9a9a9a"
+              />
             </View>
-            <Switch
-              onValueChange={toggleDarkMode} // Toggle dark mode instantly
-              value={darkMode}
-              trackColor={{ true: "#000" }}
-              ios_backgroundColor="#9a9a9a"
-            />
+            <View style={styles.row}>
+              <View style={styles.rowText}>
+                <Text style={styles.rowTextBig}>Dark Mode</Text>
+                <Text style={styles.rowTextSmall}>
+                  Change the app to dark mode
+                </Text>
+              </View>
+              <Switch
+                onValueChange={toggleDark}
+                value={dark}
+                trackColor={{ true: "#000" }}
+                ios_backgroundColor="#9a9a9a"
+              />
+            </View>
           </View>
         </View>
       </BottomSheetView>
