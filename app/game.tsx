@@ -11,7 +11,7 @@ import { words } from "@/utils/targetWords";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { Stack, useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Platform,
   StyleSheet,
@@ -54,13 +54,6 @@ const Page = () => {
     }
   }, [colorScheme, themeSwitch]);
 
-  const backgroundColorAnimation = useAnimatedStyle(() => {
-    return {
-      backgroundColor:
-        theme === "dark" ? withTiming("black") : withTiming("white"),
-    };
-  });
-
   // ============================================================
 
   // const [word, setWord] = useState('simon');
@@ -85,6 +78,9 @@ const Page = () => {
     // settingsModalRef.current?.present();
     bottomSheetRef.current?.expand();
   };
+  const handleOpenSettings = useCallback(() => {
+    settingsModalRef.current?.present();
+  }, []);
 
   const colStateRef = useRef(curCol);
   const setCurCol = (data: number) => {
@@ -323,11 +319,7 @@ const Page = () => {
         options={{
           headerRight: () => (
             <View style={styles.headerIcons}>
-              <TouchableOpacity
-                onPress={() => {
-                  settingsModalRef.current?.present();
-                }}
-              >
+              <TouchableOpacity onPress={handleOpenSettings}>
                 <Ionicons
                   name="help-circle-outline"
                   size={28}
@@ -382,13 +374,15 @@ const Page = () => {
         yellowLetters={yellowLetters}
         grayLetters={grayLetters}
       />
-      <BottomSheet
-        ref={bottomSheetRef}
-        setTheme={setTheme}
-        theme={theme}
-        setThemeSwitch={setThemeSwitch}
-        themeSwitch={themeSwitch}
-      />
+      {bottomSheetRef && (
+        <BottomSheet
+          ref={bottomSheetRef}
+          setTheme={setTheme}
+          theme={theme}
+          setThemeSwitch={setThemeSwitch}
+          themeSwitch={themeSwitch}
+        />
+      )}
     </View>
   );
 };

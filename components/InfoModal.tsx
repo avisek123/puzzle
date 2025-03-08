@@ -13,7 +13,7 @@ import { useMMKVBoolean } from "react-native-mmkv";
 import { storage } from "@/utils/storage";
 
 const InfoModal = forwardRef<Ref>((props, ref) => {
-  const snapPoints = useMemo(() => ["70%"], []);
+  const snapPoints = useMemo(() => ["65%"], []);
   const { dismiss } = useBottomSheetModal();
   const [dark, setDark] = useMMKVBoolean("dark-mode", storage);
   const [hard, setHard] = useMMKVBoolean("hard-mode", storage);
@@ -354,6 +354,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     backgroundColor: "#fff",
+    marginTop: 5,
   },
   containerHeadline: {
     fontSize: 24,
