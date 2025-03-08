@@ -39,7 +39,7 @@ const LoginModal = forwardRef<Ref>((props, ref) => {
       });
 
       const { createdSessionId, setActive } = response;
-
+      console.log("createdSessionId", createdSessionId);
       if (createdSessionId) {
         setActive!({ session: createdSessionId });
         // router.push("/game");

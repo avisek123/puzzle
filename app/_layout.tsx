@@ -9,7 +9,7 @@ import {
   FrankRuhlLibre_500Medium,
   FrankRuhlLibre_900Black,
 } from "@expo-google-fonts/frank-ruhl-libre";
-import { router, Stack } from "expo-router";
+import { router, Stack, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
@@ -21,6 +21,8 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Appearance, Platform } from "react-native";
 import * as Linking from "expo-linking";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { useMMKVBoolean } from "react-native-mmkv";
+import { storage } from "@/utils/storage";
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 
@@ -29,6 +31,16 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+
+  const router = useRouter();
+  const [dark] = useMMKVBoolean("dark-mode", storage);
+
+  useEffect(() => {
+    if (Platform.OS !== "web") {
+      Appearance.setColorScheme(dark ? "dark" : "light");
+    }
+  }, [dark]);
+
   let [fontsLoaded] = useFonts({
     FrankRuhlLibre_800ExtraBold,
     FrankRuhlLibre_500Medium,
@@ -72,6 +84,10 @@ export default function RootLayout() {
         >
           <GestureHandlerRootView style={{ flex: 1 }}>
             <BottomSheetModalProvider>
+              <StatusBar
+                style={colorScheme === "dark" ? "light" : "dark"}
+                animated={true}
+              />
               <Stack>
                 <Stack.Screen options={{ headerShown: false }} name="index" />
                 <Stack.Screen name="login" />
@@ -79,7 +95,7 @@ export default function RootLayout() {
                   name="game"
                   options={{
                     headerBackTitle: "Puzzly",
-                    headerTitle: "Puzzle Word",
+                    headerTitle: "Wuzzle",
                     headerTitleAlign: "left",
                     headerTitleStyle: {
                       fontSize: 26,

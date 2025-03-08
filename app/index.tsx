@@ -31,11 +31,14 @@ import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import LoginModal from "@/components/LoginModal";
 import * as WebBrowser from "expo-web-browser";
 import * as AuthSession from "expo-auth-session";
+import { FIRESTORE_DB } from "@/utils/FirebaseConfig";
+import { doc, getDoc } from "@firebase/firestore";
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
 
 export default function Index() {
   const { user } = useUser();
+  const [streak, setStreak] = useState(0);
   const { isLoaded, isSignedIn, signOut } = useAuth();
 
   const [isSessionReady, setIsSessionReady] = useState(false);
@@ -63,11 +66,33 @@ export default function Index() {
     return <ActivityIndicator size="large" color="#000" />;
   }
 
+  // const fetchUserStreak = async () => {
+  //   if (!user) return;
+
+  //   const docRef = doc(FIRESTORE_DB, `highscore/${user.id}`);
+  //   const userScore = await getDoc(docRef);
+
+  //   if (userScore.exists()) {
+  //     setStreak(userScore.data().currentStreak);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (user) {
+  //     fetchUserStreak();
+  //   }
+  // }, [user]);
+
   return (
-    <Animated.View style={[styles.container, { backgroundColor }]}>
+    <Animated.View
+      style={[
+        styles.container,
+        { backgroundColor: colorScheme === "light" ? "#fff" : "#000" },
+      ]}
+    >
       <Animated.View style={styles.header} entering={FadeInDown}>
-        <Icon width={100} height={70} />
-        <ThemedText style={styles.title}>Puzzle Word</ThemedText>
+        <Icon width={120} height={90} />
+        <ThemedText style={styles.title}>Wuzzle</ThemedText>
         <ThemedText style={styles.text}>
           Crack the word in 6 attempts—can you do it?
         </ThemedText>
@@ -115,9 +140,13 @@ export default function Index() {
           {user?.primaryEmailAddress?.emailAddress}
         </ThemedText>
 
-        <ThemedText style={styles.footerText}>
-          {format(new Date(), "MMMM d, yyyy")}
-        </ThemedText>
+        {isSignedIn && (
+          <ThemedText style={styles.footerText}>
+            {streak > 0
+              ? `Current Streak: ${streak} 🔥`
+              : "Start a streak now! 🚀"}
+          </ThemedText>
+        )}
       </Animated.View>
 
       <LoginModal ref={loginModalRef} />

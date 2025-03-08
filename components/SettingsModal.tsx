@@ -47,26 +47,12 @@ const SettingsModal = forwardRef<Ref>((props, ref) => {
       <BottomSheetView style={styles.contentContainer}>
         <View style={styles.contentContainer}>
           <View style={styles.modalBtns}>
-            <Text style={styles.containerHeadline}>SETTINGS</Text>
+            <Text style={styles.containerHeadline}>Game Settings</Text>
             <TouchableOpacity onPress={() => dismiss()}>
               <Ionicons name="close" size={28} color={Colors.light.gray} />
             </TouchableOpacity>
           </View>
           <View>
-            <View style={styles.row}>
-              <View style={styles.rowText}>
-                <Text style={styles.rowTextBig}>Hard Mode</Text>
-                <Text style={styles.rowTextSmall}>
-                  Words are longer and harder
-                </Text>
-              </View>
-              <Switch
-                onValueChange={toggleHard}
-                value={hard}
-                trackColor={{ true: "#000" }}
-                ios_backgroundColor="#9a9a9a"
-              />
-            </View>
             <View style={styles.row}>
               <View style={styles.rowText}>
                 <Text style={styles.rowTextBig}>Dark Mode</Text>
@@ -95,7 +81,7 @@ const styles = StyleSheet.create({
   },
   containerHeadline: {
     fontSize: 18,
-    textAlign: "center",
+    textAlign: "left",
     fontWeight: "bold",
     flex: 1,
   },

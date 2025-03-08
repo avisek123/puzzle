@@ -135,7 +135,13 @@ const Page = () => {
 
       <View style={styles.header}>
         {win === "true" ? (
-          <Image source={require("@/assets/images/win.png")} />
+          <Image
+            style={{
+              width: 200,
+              height: 200,
+            }}
+            source={require("@/assets/images/win.jpg")}
+          />
         ) : (
           <Icon width={100} height={70} />
         )}
@@ -178,15 +184,13 @@ const Page = () => {
             backgroundColor: "#4e4e4e",
           }}
         />
-        {/* <SignedIn>
-         
-            <TouchableOpacity
-          
-            >
+        <SignedIn>
+          <Link href={"/game"} style={styles.btn} asChild>
+            <TouchableOpacity>
               <Text style={styles.btnText}>Play Again!</Text>
             </TouchableOpacity>
-
-        </SignedIn> */}
+          </Link>
+        </SignedIn>
       </View>
     </View>
   );
