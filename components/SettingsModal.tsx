@@ -47,7 +47,7 @@ const SettingsModal = forwardRef<Ref>((props, ref) => {
       <BottomSheetView style={styles.contentContainer}>
         <View style={styles.contentContainer}>
           <View style={styles.modalBtns}>
-            <Text style={styles.containerHeadline}>Game Settings</Text>
+            <Text style={styles.containerHeadline}>Settings</Text>
             <TouchableOpacity onPress={() => dismiss()}>
               <Ionicons name="close" size={28} color={Colors.light.gray} />
             </TouchableOpacity>

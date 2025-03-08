@@ -50,7 +50,11 @@ Join our community of developers creating universal apps.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
 
 - Dark/Light Theme
+- Add FaceBook Button
+- Login Modal
+- Display Streak in Index page
+
 - Game Instruction
-- Share Button For Social
 - End Screen Back Button
--
+- name & logo
+- index page back-handler

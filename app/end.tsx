@@ -5,11 +5,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import * as MailComposer from "expo-mail-composer";
 import { SignedIn, SignedOut, useUser } from "@clerk/clerk-expo";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { doc, getDoc, setDoc } from "@firebase/firestore";
 import { FIRESTORE_DB } from "@/utils/FirebaseConfig";
+import LoginModal from "@/components/LoginModal";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 const Page = () => {
+  const loginModalRef = useRef<BottomSheetModal>(null);
   const { win, word, gameField } = useLocalSearchParams<{
     win: string;
     word: string;
@@ -122,12 +125,17 @@ const Page = () => {
     router.replace("/");
   };
 
+  const handlePresentSubscribeModalPress = () => {
+    loginModalRef.current?.present();
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
         onPress={navigateRoot}
         style={{
           alignSelf: "flex-end",
+          marginTop: "10%",
         }}
       >
         <Ionicons name="close" size={30} color={Colors.light.gray} />
@@ -152,11 +160,12 @@ const Page = () => {
         <SignedOut>
           <Text style={styles.text}>Want to see your stats and streaks?</Text>
 
-          <Link href={"/login"} style={styles.btn} asChild>
-            <TouchableOpacity>
-              <Text style={styles.btnText}>Create a free account</Text>
-            </TouchableOpacity>
-          </Link>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={handlePresentSubscribeModalPress}
+          >
+            <Text style={styles.btnText}>Create a free account</Text>
+          </TouchableOpacity>
         </SignedOut>
 
         <SignedIn>
@@ -192,6 +201,7 @@ const Page = () => {
           </Link>
         </SignedIn>
       </View>
+      <LoginModal ref={loginModalRef} />
     </View>
   );
 };

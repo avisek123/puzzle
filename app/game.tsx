@@ -1,3 +1,5 @@
+import BottomSheet, { BottomSheetMethods } from "@/components/BottomSheet";
+import InfoModal from "@/components/InfoModal";
 import OnScreenKeyboard, {
   BACKSPACE,
   DONE,
@@ -6,7 +8,7 @@ import SettingsModal from "@/components/SettingsModal";
 import { Colors } from "@/constants/Colors";
 import { allWords } from "@/utils/allWord";
 import { words } from "@/utils/targetWords";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { Stack, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
@@ -26,6 +28,7 @@ import Animated, {
   withTiming,
   ZoomIn,
 } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const ROWS = 6;
 
@@ -37,6 +40,28 @@ const Page = () => {
   const backgroundColor = Colors[colorScheme ?? "light"].gameBg;
   const textColor = Colors[colorScheme ?? "light"].text;
   const grayColor = Colors[colorScheme ?? "light"].gray;
+
+  // ============================================================
+  const insets = useSafeAreaInsets();
+  const bottomSheetRef = useRef<BottomSheetMethods>(null);
+
+  const [theme, setTheme] = useState<string | null | undefined>(colorScheme);
+  const [themeSwitch, setThemeSwitch] = useState<string>("system");
+
+  useEffect(() => {
+    if (themeSwitch === "system") {
+      setTheme(colorScheme);
+    }
+  }, [colorScheme, themeSwitch]);
+
+  const backgroundColorAnimation = useAnimatedStyle(() => {
+    return {
+      backgroundColor:
+        theme === "dark" ? withTiming("black") : withTiming("white"),
+    };
+  });
+
+  // ============================================================
 
   // const [word, setWord] = useState('simon');
   const router = useRouter();
@@ -57,8 +82,8 @@ const Page = () => {
   const settingsModalRef = useRef<BottomSheetModal>(null);
 
   const handlePresentSubscribeModalPress = () => {
-    console.log("Press");
-    settingsModalRef.current?.present();
+    // settingsModalRef.current?.present();
+    bottomSheetRef.current?.expand();
   };
 
   const colStateRef = useRef(curCol);
@@ -293,19 +318,29 @@ const Page = () => {
 
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      <SettingsModal ref={settingsModalRef} />
+      <InfoModal ref={settingsModalRef} />
       <Stack.Screen
         options={{
           headerRight: () => (
             <View style={styles.headerIcons}>
-              <Ionicons
-                name="help-circle-outline"
-                size={28}
-                color={textColor}
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  settingsModalRef.current?.present();
+                }}
+              >
+                <Ionicons
+                  name="help-circle-outline"
+                  size={28}
+                  color={textColor}
+                />
+              </TouchableOpacity>
 
               <TouchableOpacity onPress={handlePresentSubscribeModalPress}>
-                <Ionicons name="settings-sharp" size={24} color={textColor} />
+                <MaterialCommunityIcons
+                  name="theme-light-dark"
+                  size={24}
+                  color={textColor}
+                />
               </TouchableOpacity>
             </View>
           ),
@@ -346,6 +381,13 @@ const Page = () => {
         greenLetters={greenLetters}
         yellowLetters={yellowLetters}
         grayLetters={grayLetters}
+      />
+      <BottomSheet
+        ref={bottomSheetRef}
+        setTheme={setTheme}
+        theme={theme}
+        setThemeSwitch={setThemeSwitch}
+        themeSwitch={themeSwitch}
       />
     </View>
   );

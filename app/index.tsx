@@ -38,7 +38,7 @@ const AnimatedTouchableOpacity =
 
 export default function Index() {
   const { user } = useUser();
-  const [streak, setStreak] = useState(0);
+  const [streak, setStreak] = useState<number | null>(null); // Initialize properly
   const { isLoaded, isSignedIn, signOut } = useAuth();
 
   const [isSessionReady, setIsSessionReady] = useState(false);
@@ -55,6 +55,32 @@ export default function Index() {
   };
 
   useEffect(() => {
+    let isMounted = true; // Prevent state update if unmounted
+
+    const fetchUserStreak = async () => {
+      if (!user?.id) return; // Ensure `user.id` exists before making Firestore calls
+
+      try {
+        const docRef = doc(FIRESTORE_DB, `highscore/${user.id}`);
+        const userScore = await getDoc(docRef);
+
+        if (userScore.exists() && isMounted) {
+          const data = userScore.data();
+          setStreak(data.currentStreak || 0); // Safe update
+        }
+      } catch (error) {
+        console.error("Error fetching streak:", error);
+      }
+    };
+
+    fetchUserStreak();
+
+    return () => {
+      isMounted = false; // Cleanup to prevent memory leaks
+    };
+  }, [user?.id]); // De
+
+  useEffect(() => {
     if (isLoaded) {
       setTimeout(() => {
         setIsSessionReady(true);
@@ -65,23 +91,6 @@ export default function Index() {
   if (!isLoaded || !isSessionReady) {
     return <ActivityIndicator size="large" color="#000" />;
   }
-
-  // const fetchUserStreak = async () => {
-  //   if (!user) return;
-
-  //   const docRef = doc(FIRESTORE_DB, `highscore/${user.id}`);
-  //   const userScore = await getDoc(docRef);
-
-  //   if (userScore.exists()) {
-  //     setStreak(userScore.data().currentStreak);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (user) {
-  //     fetchUserStreak();
-  //   }
-  // }, [user]);
 
   return (
     <Animated.View
@@ -96,6 +105,7 @@ export default function Index() {
         <ThemedText style={styles.text}>
           Crack the word in 6 attempts—can you do it?
         </ThemedText>
+        <ThemedText style={styles.offerText}>Play & win</ThemedText>
       </Animated.View>
 
       <View
@@ -142,7 +152,7 @@ export default function Index() {
 
         {isSignedIn && (
           <ThemedText style={styles.footerText}>
-            {streak > 0
+            {streak !== null
               ? `Current Streak: ${streak} 🔥`
               : "Start a streak now! 🚀"}
           </ThemedText>
@@ -211,5 +221,12 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: 14,
     marginTop: 5,
+  },
+  offerText: {
+    fontSize: 22,
+    textAlign: "center",
+    fontFamily: "FrankRuhlLibre_800ExtraBold",
+    color: "#ff9800", // Orange color for a highlight effect
+    marginTop: 10,
   },
 });

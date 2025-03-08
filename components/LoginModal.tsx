@@ -28,7 +28,7 @@ WebBrowser.maybeCompleteAuthSession();
 const LoginModal = forwardRef<Ref>((props, ref) => {
   useWarmUpBrowser();
   const { startSSOFlow } = useSSO();
-  const snapPoints = useMemo(() => ["35%"], []);
+  const snapPoints = useMemo(() => ["40%"], []);
   const { dismiss } = useBottomSheetModal();
 
   const onPress = useCallback(async () => {
@@ -39,7 +39,7 @@ const LoginModal = forwardRef<Ref>((props, ref) => {
       });
 
       const { createdSessionId, setActive } = response;
-      console.log("createdSessionId", createdSessionId);
+
       if (createdSessionId) {
         setActive!({ session: createdSessionId });
         // router.push("/game");
@@ -92,6 +92,17 @@ const LoginModal = forwardRef<Ref>((props, ref) => {
           <TouchableOpacity onPress={onPress} style={styles.btnOutline}>
             <Ionicons name="logo-google" size={24} style={styles.btnIcon} />
             <Text style={styles.btnOutlineText}>Continue with Google</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            disabled
+            style={{
+              ...styles.btnOutline,
+              backgroundColor: "grey",
+              borderColor: "grey",
+            }}
+          >
+            <Ionicons name="logo-facebook" size={24} style={styles.btnIcon} />
+            <Text style={styles.btnOutlineText}>Continue with Facebook</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => dismiss()}
