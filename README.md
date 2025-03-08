@@ -53,8 +53,8 @@ Join our community of developers creating universal apps.
 - Add FaceBook Button
 - Login Modal
 - Display Streak in Index page
-
 - Game Instruction
+
 - End Screen Back Button
 - name & logo
 - index page back-handler

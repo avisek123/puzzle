@@ -7,6 +7,8 @@ import {
   useWindowDimensions,
   Linking,
   ActivityIndicator,
+  Alert,
+  BackHandler,
 } from "react-native";
 import Icon from "@/assets/images/puzzle-icon.svg";
 import { format } from "date-fns";
@@ -81,6 +83,27 @@ export default function Index() {
   }, [user?.id]); // De
 
   useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Exit App", "Are you sure you want to exit?", [
+        {
+          text: "Cancel",
+          onPress: () => null,
+          style: "cancel",
+        },
+        { text: "Exit", onPress: () => BackHandler.exitApp() },
+      ]);
+      return true; // Prevent default behavior (app exit)
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove(); // Cleanup on unmount
+  }, []);
+
+  useEffect(() => {
     if (isLoaded) {
       setTimeout(() => {
         setIsSessionReady(true);
@@ -89,7 +112,17 @@ export default function Index() {
   }, [isLoaded]);
 
   if (!isLoaded || !isSessionReady) {
-    return <ActivityIndicator size="large" color="#000" />;
+    return (
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+        }}
+      >
+        <ActivityIndicator size="large" color="#000" />
+      </View>
+    );
   }
 
   return (
