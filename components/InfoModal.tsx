@@ -8,7 +8,7 @@ import {
 } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 export type Ref = BottomSheetModal;
-import { Colors } from "@/constants/Colors";
+import { Colors, GREEN, YELLOW } from "@/constants/Colors";
 import { useMMKVBoolean } from "react-native-mmkv";
 import { storage } from "@/utils/storage";
 
@@ -96,6 +96,234 @@ const InfoModal = forwardRef<Ref>((props, ref) => {
                   fontWeight: "bold",
                 }}
               >
+                Example
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 5,
+                }}
+              >
+                <View style={styles.wordContainer}>
+                  <Text
+                    style={{
+                      color: "#fff",
+                    }}
+                  >
+                    W
+                  </Text>
+                </View>
+                <View style={styles.WordContainer}>
+                  <Text
+                    style={{
+                      color: "#000",
+                    }}
+                  >
+                    O
+                  </Text>
+                </View>
+                <View style={styles.WordContainer}>
+                  <Text
+                    style={{
+                      color: "#000",
+                    }}
+                  >
+                    R
+                  </Text>
+                </View>
+                <View style={styles.WordContainer}>
+                  <Text
+                    style={{
+                      color: "#000",
+                    }}
+                  >
+                    L
+                  </Text>
+                </View>
+                <View style={styles.WordContainer}>
+                  <Text
+                    style={{
+                      color: "#000",
+                    }}
+                  >
+                    D
+                  </Text>
+                </View>
+              </View>
+              <Text
+                style={{
+                  marginTop: 4,
+                }}
+              >
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  W {""}
+                </Text>
+                is in the word and in the correct place.
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 5,
+                }}
+              >
+                <View style={{ ...styles.WordContainer, marginStart: 0 }}>
+                  <Text
+                    style={{
+                      color: "#000",
+                    }}
+                  >
+                    B
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.wordContainer,
+                    backgroundColor: YELLOW,
+                    marginStart: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                    }}
+                  >
+                    E
+                  </Text>
+                </View>
+                <View style={styles.WordContainer}>
+                  <Text
+                    style={{
+                      color: "#000",
+                    }}
+                  >
+                    L
+                  </Text>
+                </View>
+                <View style={styles.WordContainer}>
+                  <Text
+                    style={{
+                      color: "#000",
+                    }}
+                  >
+                    L
+                  </Text>
+                </View>
+                <View style={styles.WordContainer}>
+                  <Text
+                    style={{
+                      color: "#000",
+                    }}
+                  >
+                    Y
+                  </Text>
+                </View>
+              </View>
+
+              <Text
+                style={{
+                  marginTop: 4,
+                }}
+              >
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  E {""}
+                </Text>
+                is in the word but in the wrong place.
+              </Text>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 5,
+                }}
+              >
+                <View style={{ ...styles.WordContainer, marginStart: 0 }}>
+                  <Text
+                    style={{
+                      color: "#000",
+                    }}
+                  >
+                    S
+                  </Text>
+                </View>
+                <View style={styles.WordContainer}>
+                  <Text
+                    style={{
+                      color: "#000",
+                    }}
+                  >
+                    A
+                  </Text>
+                </View>
+                <View style={styles.WordContainer}>
+                  <Text
+                    style={{
+                      color: "#000",
+                    }}
+                  >
+                    L
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.wordContainer,
+                    backgroundColor: "grey",
+                    marginStart: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                    }}
+                  >
+                    T
+                  </Text>
+                </View>
+                <View style={styles.WordContainer}>
+                  <Text
+                    style={{
+                      color: "#000",
+                    }}
+                  >
+                    Y
+                  </Text>
+                </View>
+              </View>
+
+              <Text
+                style={{
+                  marginTop: 4,
+                }}
+              >
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  T {""}
+                </Text>
+                is not in the word in any place.
+              </Text>
+            </View>
+
+            <View
+              style={{
+                marginTop: 15,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "bold",
+                }}
+              >
                 🎉 Win & Get Rewarded! 🎁
               </Text>
               <Text
@@ -113,15 +341,6 @@ const InfoModal = forwardRef<Ref>((props, ref) => {
                 {
                   "2. Achieve two 3-game winning streak (non consecutive) to unlock an ₹199 Amazon voucher."
                 }
-              </Text>
-              <Text
-                style={{
-                  marginTop: 5,
-                  textAlign: "center",
-                  fontWeight: "bold",
-                }}
-              >
-                More wins = Bigger rewards! 🚀
               </Text>
             </View>
           </View>
@@ -150,6 +369,22 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 15,
     textAlign: "left",
+  },
+  wordContainer: {
+    backgroundColor: GREEN,
+    width: 30,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+  },
+  WordContainer: {
+    marginLeft: 5,
+    width: 30,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
   },
 });
 
