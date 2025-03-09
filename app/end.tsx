@@ -1,5 +1,12 @@
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Icon from "@/assets/images/puzzle-icon.svg";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
@@ -13,6 +20,8 @@ import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 const Page = () => {
   const loginModalRef = useRef<BottomSheetModal>(null);
+  const [loading, setLoading] = useState(true);
+
   const { win, word, gameField } = useLocalSearchParams<{
     win: string;
     word: string;
@@ -129,6 +138,28 @@ const Page = () => {
     loginModalRef.current?.present();
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000); // 2-second delay
+
+    return () => clearTimeout(timer); // Cleanup function
+  }, []);
+
+  if (loading) {
+    return (
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+        }}
+      >
+        <ActivityIndicator size="large" color="#000" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -155,7 +186,7 @@ const Page = () => {
         )}
 
         <Text style={styles.title}>
-          {win === "true" ? "Congratulations!" : "Thanks for playing today!"}
+          {win === "true" ? "Congratulations!" : "Thanks for playing!"}
         </Text>
         <SignedOut>
           <Text style={styles.text}>Want to see your stats and streaks?</Text>
@@ -169,7 +200,7 @@ const Page = () => {
         </SignedOut>
 
         <SignedIn>
-          <Text style={styles.text}>Statistics</Text>
+          <Text style={styles.text}>Scoreboard</Text>
           <View style={styles.stats}>
             <View>
               <Text style={styles.score}>{userScore?.played}</Text>

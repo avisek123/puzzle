@@ -13,7 +13,7 @@ import { useMMKVBoolean } from "react-native-mmkv";
 import { storage } from "@/utils/storage";
 
 const InfoModal = forwardRef<Ref>((props, ref) => {
-  const snapPoints = useMemo(() => ["65%"], []);
+  const snapPoints = useMemo(() => ["70%"], []);
   const { dismiss } = useBottomSheetModal();
   const [dark, setDark] = useMMKVBoolean("dark-mode", storage);
   const [hard, setHard] = useMMKVBoolean("hard-mode", storage);
@@ -340,6 +340,16 @@ const InfoModal = forwardRef<Ref>((props, ref) => {
               >
                 {
                   "2. Achieve two 3-game winning streak (non consecutive) to unlock an ₹199 Amazon voucher."
+                }
+              </Text>
+              <Text
+                style={{
+                  textAlign: "justify",
+                  marginTop: 5,
+                }}
+              >
+                {
+                  "3. Keep your winning streak alive. But be careful—one wrong guess will reset your streak!"
                 }
               </Text>
             </View>

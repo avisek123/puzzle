@@ -185,7 +185,7 @@ export default function Index() {
 
         {isSignedIn && (
           <ThemedText style={styles.footerText}>
-            {streak !== null
+            {streak !== 0
               ? `Current Streak: ${streak} 🔥`
               : "Start a streak now! 🚀"}
           </ThemedText>
