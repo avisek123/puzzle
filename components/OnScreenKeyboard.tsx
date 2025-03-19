@@ -22,7 +22,7 @@ export const BACKSPACE = "BACKSPACE";
 const keys = [
   ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
   ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-  [DONE, "z", "x", "c", "v", "b", "n", "m", BACKSPACE],
+  ["z", "x", "c", "v", "b", "n", "m", BACKSPACE],
 ];
 
 const OnScreenKeyboard = ({
@@ -33,7 +33,7 @@ const OnScreenKeyboard = ({
 }: OnScreenKeyboardProps) => {
   const { width } = useWindowDimensions();
   const keyWidth = Platform.OS === "web" ? 58 : (width - 60) / keys[0].length;
-  const keyHeight = 60;
+  const keyHeight = 45;
 
   const isSpecialKey = (key: string) => key === DONE || key === BACKSPACE;
 
@@ -50,7 +50,16 @@ const OnScreenKeyboard = ({
               key={`key-${key}`}
               style={({ pressed }) => [
                 styles.key,
-                { width: keyWidth, height: keyHeight, backgroundColor: "#ddd" },
+                {
+                  width: keyWidth,
+                  height: keyHeight,
+                  backgroundColor: "#ddd",
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 3.84,
+                  elevation: 5,
+                },
                 isSpecialKey(key) && { width: keyWidth * 1.5 },
                 pressed && { backgroundColor: "#868686" },
                 {

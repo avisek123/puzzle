@@ -18,6 +18,7 @@ import {
   TouchableOpacity,
   useColorScheme,
   View,
+  Text,
 } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -36,6 +37,7 @@ const Page = () => {
   const [word, setWord] = useState(
     words[Math.floor(Math.random() * words.length)]
   );
+  const [openModal, setOpenModal] = useState(false);
   const colorScheme = useColorScheme();
   const backgroundColor = Colors[colorScheme ?? "light"].gameBg;
   const textColor = Colors[colorScheme ?? "light"].text;
@@ -79,7 +81,8 @@ const Page = () => {
     bottomSheetRef.current?.expand();
   };
   const handleOpenSettings = useCallback(() => {
-    settingsModalRef.current?.present();
+    // settingsModalRef.current?.present();
+    setOpenModal(true);
   }, []);
 
   const colStateRef = useRef(curCol);
@@ -170,7 +173,7 @@ const Page = () => {
 
   useEffect(() => {
     const handleKeyDown = (e: any) => {
-      if (e.key === "Enter") {
+      if (e.key === "DONE") {
         addKey(DONE);
       } else if (e.key === "Backspace") {
         addKey(BACKSPACE);
@@ -314,12 +317,17 @@ const Page = () => {
 
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      <InfoModal ref={settingsModalRef} />
+      {openModal && (
+        <InfoModal onClose={() => setOpenModal(false)} visible={openModal} />
+      )}
       <Stack.Screen
         options={{
           headerRight: () => (
             <View style={styles.headerIcons}>
-              <TouchableOpacity onPress={handleOpenSettings}>
+              <TouchableOpacity
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                onPress={handleOpenSettings}
+              >
                 <Ionicons
                   name="help-circle-outline"
                   size={28}
@@ -368,12 +376,32 @@ const Page = () => {
           </Animated.View>
         ))}
       </View>
+
       <OnScreenKeyboard
         onKeyPressed={addKey}
         greenLetters={greenLetters}
         yellowLetters={yellowLetters}
         grayLetters={grayLetters}
       />
+      <TouchableOpacity
+        onPress={() => {
+          addKey(DONE);
+        }}
+        style={{
+          justifyContent: "center",
+          alignSelf: "center",
+          borderRadius: 30,
+          alignItems: "center",
+          borderColor: "#000",
+          borderWidth: 1,
+          width: "60%",
+          maxWidth: 200,
+          marginTop: "7%",
+          backgroundColor: colorScheme === "light" ? "#000" : "#4a4a4a",
+        }}
+      >
+        <Text style={[styles.btnText, styles.primaryText]}>Submit</Text>
+      </TouchableOpacity>
       {bottomSheetRef && (
         <BottomSheet
           ref={bottomSheetRef}
@@ -417,5 +445,17 @@ const styles = StyleSheet.create({
   headerIcons: {
     flexDirection: "row",
     gap: 10,
+  },
+  btnText: {
+    padding: 14,
+    fontSize: 16,
+    fontWeight: "semibold",
+    color: "#333",
+  },
+  primaryItem: {
+    backgroundColor: "#000",
+  },
+  primaryText: {
+    color: "#fff",
   },
 });

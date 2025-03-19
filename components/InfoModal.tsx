@@ -1,402 +1,287 @@
-import { View, StyleSheet, Text, TouchableOpacity, Switch } from "react-native";
-import React, { forwardRef, useCallback, useMemo } from "react";
+import React from "react";
 import {
-  BottomSheetBackdrop,
-  BottomSheetModal,
-  BottomSheetView,
-  useBottomSheetModal,
-} from "@gorhom/bottom-sheet";
-import { Ionicons } from "@expo/vector-icons";
-export type Ref = BottomSheetModal;
-import { Colors, GREEN, YELLOW } from "@/constants/Colors";
-import { useMMKVBoolean } from "react-native-mmkv";
-import { storage } from "@/utils/storage";
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  useColorScheme,
+  View,
+} from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Colors } from "@/constants/Colors";
+import Modal from "react-native-modal";
+type Props = {
+  visible: boolean;
+  onClose: () => void;
+};
 
-const InfoModal = forwardRef<Ref>((props, ref) => {
-  const snapPoints = useMemo(() => ["70%"], []);
-  const { dismiss } = useBottomSheetModal();
-  const [dark, setDark] = useMMKVBoolean("dark-mode", storage);
-  const [hard, setHard] = useMMKVBoolean("hard-mode", storage);
-  const [contrast, setContrast] = useMMKVBoolean("contrast-mode", storage);
-
-  const toggleDark = () => setDark((prev) => !!!prev);
-  const toggleHard = () => setHard((prev) => !!!prev);
-  const toggleContrast = () => setContrast((prev) => !!!prev);
-
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        opacity={0.2}
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        {...props}
-        onPress={dismiss}
-      />
-    ),
-    []
-  );
-
+const HowToPlayModal = ({ visible, onClose }: Props) => {
+  const colorScheme = useColorScheme();
   return (
-    <BottomSheetModal
-      ref={ref}
-      index={0}
-      backdropComponent={renderBackdrop}
-      snapPoints={snapPoints}
-      handleComponent={null}
-    >
-      <BottomSheetView style={styles.contentContainer}>
-        <View style={styles.contentContainer}>
+    <View>
+      <Modal onBackdropPress={onClose} isVisible={visible}>
+        <View
+          style={{
+            flex: 0.8,
+            backgroundColor: "#fff",
+            width: "100%",
+            padding: 15,
+            borderRadius: 10,
+          }}
+        >
           <View style={styles.modalBtns}>
-            <View
-              style={{
-                flex: 1,
-              }}
-            >
+            <View style={{ flex: 1 }}>
               <Text style={styles.containerHeadline}>How to Play</Text>
               <Text style={styles.subtitle}>
                 {"Guess the Wuzzle in 6 tries."}
               </Text>
             </View>
 
-            <TouchableOpacity onPress={() => dismiss()}>
+            {/* <TouchableOpacity onPress={onClose}>
               <Ionicons name="close" size={28} color={Colors.light.gray} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
-          <View
-            style={{
-              marginHorizontal: 15,
-            }}
-          >
-            <Text
-              style={{
-                textAlign: "justify",
-              }}
-            >
-              {"1. Each guess must be a valid 5-letter word."}
+
+          {/* Instructions */}
+          <View style={{ marginHorizontal: 15, marginTop: 10 }}>
+            <Text style={styles.instruction}>
+              1. Each guess must be a valid 5-letter word.
             </Text>
-            <Text
-              style={{
-                textAlign: "justify",
-                marginTop: 5,
-              }}
-            >
-              {
-                "2. The color of the tiles will change to show how close your guess was to the word."
-              }
+            <Text style={[styles.instruction, { marginTop: 5 }]}>
+              2. The color of the tiles will change to show how close your guess
+              was to the word.
             </Text>
 
-            <View
-              style={{
-                marginTop: 15,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontWeight: "bold",
-                }}
-              >
-                Example
-              </Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  marginTop: 5,
-                }}
-              >
-                <View style={styles.wordContainer}>
-                  <Text
-                    style={{
-                      color: "#fff",
-                    }}
-                  >
-                    W
-                  </Text>
+            {/* Example Section */}
+            <View style={styles.exampleSection}>
+              <Text style={styles.exampleTitle}>Example</Text>
+
+              {/* Example 1 */}
+              <View style={styles.wordRow}>
+                <View style={styles.correctTile}>
+                  <Text style={styles.tileText}>W</Text>
                 </View>
-                <View style={styles.WordContainer}>
-                  <Text
-                    style={{
-                      color: "#000",
-                    }}
-                  >
-                    O
-                  </Text>
-                </View>
-                <View style={styles.WordContainer}>
-                  <Text
-                    style={{
-                      color: "#000",
-                    }}
-                  >
-                    R
-                  </Text>
-                </View>
-                <View style={styles.WordContainer}>
-                  <Text
-                    style={{
-                      color: "#000",
-                    }}
-                  >
-                    L
-                  </Text>
-                </View>
-                <View style={styles.WordContainer}>
-                  <Text
-                    style={{
-                      color: "#000",
-                    }}
-                  >
-                    D
-                  </Text>
-                </View>
+                {["O", "R", "L", "D"].map((letter) => (
+                  <View key={letter} style={styles.tile}>
+                    <Text style={styles.tileTextDark}>{letter}</Text>
+                  </View>
+                ))}
               </View>
-              <Text
-                style={{
-                  marginTop: 4,
-                }}
-              >
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                  }}
-                >
-                  W {""}
-                </Text>
+              <Text style={styles.explanation}>
+                <Text style={styles.boldText}>W </Text>
                 is in the word and in the correct place.
               </Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  marginTop: 5,
-                }}
-              >
-                <View style={{ ...styles.WordContainer, marginStart: 0 }}>
-                  <Text
-                    style={{
-                      color: "#000",
-                    }}
-                  >
-                    B
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    ...styles.wordContainer,
-                    backgroundColor: YELLOW,
-                    marginStart: 5,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "#fff",
-                    }}
-                  >
-                    E
-                  </Text>
-                </View>
-                <View style={styles.WordContainer}>
-                  <Text
-                    style={{
-                      color: "#000",
-                    }}
-                  >
-                    L
-                  </Text>
-                </View>
-                <View style={styles.WordContainer}>
-                  <Text
-                    style={{
-                      color: "#000",
-                    }}
-                  >
-                    L
-                  </Text>
-                </View>
-                <View style={styles.WordContainer}>
-                  <Text
-                    style={{
-                      color: "#000",
-                    }}
-                  >
-                    Y
-                  </Text>
-                </View>
-              </View>
 
-              <Text
-                style={{
-                  marginTop: 4,
-                }}
-              >
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                  }}
-                >
-                  E {""}
-                </Text>
+              {/* Example 2 */}
+              <View style={styles.wordRow}>
+                <View style={styles.tile}>
+                  <Text style={styles.tileTextDark}>B</Text>
+                </View>
+                <View style={styles.presentTile}>
+                  <Text style={styles.tileText}>E</Text>
+                </View>
+                {["L", "L", "Y"].map((letter, ind) => (
+                  <View key={ind} style={styles.tile}>
+                    <Text style={styles.tileTextDark}>{letter}</Text>
+                  </View>
+                ))}
+              </View>
+              <Text style={styles.explanation}>
+                <Text style={styles.boldText}>E </Text>
                 is in the word but in the wrong place.
               </Text>
 
-              <View
-                style={{
-                  flexDirection: "row",
-                  marginTop: 5,
-                }}
-              >
-                <View style={{ ...styles.WordContainer, marginStart: 0 }}>
-                  <Text
-                    style={{
-                      color: "#000",
-                    }}
-                  >
-                    S
-                  </Text>
+              {/* Example 3 */}
+              <View style={styles.wordRow}>
+                {["S", "A", "L"].map((letter) => (
+                  <View key={letter} style={styles.tile}>
+                    <Text style={styles.tileTextDark}>{letter}</Text>
+                  </View>
+                ))}
+                <View style={styles.absentTile}>
+                  <Text style={styles.tileText}>T</Text>
                 </View>
-                <View style={styles.WordContainer}>
-                  <Text
-                    style={{
-                      color: "#000",
-                    }}
-                  >
-                    A
-                  </Text>
-                </View>
-                <View style={styles.WordContainer}>
-                  <Text
-                    style={{
-                      color: "#000",
-                    }}
-                  >
-                    L
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    ...styles.wordContainer,
-                    backgroundColor: "grey",
-                    marginStart: 5,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "#fff",
-                    }}
-                  >
-                    T
-                  </Text>
-                </View>
-                <View style={styles.WordContainer}>
-                  <Text
-                    style={{
-                      color: "#000",
-                    }}
-                  >
-                    Y
-                  </Text>
+                <View style={styles.tile}>
+                  <Text style={styles.tileTextDark}>Y</Text>
                 </View>
               </View>
-
-              <Text
-                style={{
-                  marginTop: 4,
-                }}
-              >
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                  }}
-                >
-                  T {""}
-                </Text>
+              <Text style={styles.explanation}>
+                <Text style={styles.boldText}>T </Text>
                 is not in the word in any place.
               </Text>
             </View>
 
-            <View
-              style={{
-                marginTop: 15,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontWeight: "bold",
-                }}
-              >
-                🎉 Win & Get Rewarded! 🎁
+            {/* Rewards Section */}
+            <View style={styles.rewardSection}>
+              <Text style={styles.rewardTitle}>🎉 Win & Get Rewarded! 🎁</Text>
+              <Text style={styles.instruction}>
+                1. Win just 1 game and grab a{" "}
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  ₹49
+                </Text>{" "}
+                Amazon voucher!
               </Text>
-              <Text
-                style={{
-                  marginTop: 5,
-                }}
-              >
-                {"1. Win 3 consecutive games and grab a ₹99 shopping voucher."}
-              </Text>
-              <Text
-                style={{
-                  marginTop: 5,
-                }}
-              >
-                {
-                  "2. Achieve two 3-game winning streak (non consecutive) to unlock an ₹199 Amazon voucher."
-                }
-              </Text>
-              <Text
-                style={{
-                  textAlign: "justify",
-                  marginTop: 5,
-                }}
-              >
-                {
-                  "3. Keep your winning streak alive. But be careful—one wrong guess will reset your streak!"
-                }
+              <Text style={styles.instruction}>
+                2. Achieve one winning streaks to unlock an{" "}
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  ₹199
+                </Text>{" "}
+                Amazon voucher.
               </Text>
             </View>
+            <TouchableOpacity
+              onPress={onClose}
+              style={{
+                justifyContent: "center",
+                alignSelf: "center",
+                borderRadius: 30,
+                alignItems: "center",
+                borderColor: "#000",
+                borderWidth: 1,
+                width: "60%",
+                maxWidth: 200,
+                marginTop: "9%",
+
+                backgroundColor: "#000",
+              }}
+            >
+              <Text style={[styles.btnText, styles.primaryText]}>Close</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </BottomSheetView>
-    </BottomSheetModal>
+      </Modal>
+    </View>
   );
-});
+};
+
+export default HowToPlayModal;
 
 const styles = StyleSheet.create({
-  contentContainer: {
+  overlay: {
     flex: 1,
-    backgroundColor: "#fff",
-    marginTop: 5,
+    backgroundColor: "red",
+    justifyContent: "center",
+    paddingHorizontal: 20,
   },
-  containerHeadline: {
-    fontSize: 24,
-    textAlign: "left",
-    fontFamily: "FrankRuhlLibre_800ExtraBold",
+  modalContainer: {
+    flex: 1, // Ensure the container takes full height
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    paddingVertical: 20,
+    paddingHorizontal: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 8,
+    justifyContent: "center", // Center content vertically
+  },
+  contentContainer: {
+    gap: 10,
   },
   modalBtns: {
     flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    justifyContent: "space-between",
     alignItems: "center",
+  },
+  containerHeadline: {
+    fontSize: 20,
+    fontWeight: "bold",
   },
   subtitle: {
-    fontSize: 15,
-    textAlign: "left",
+    fontSize: 14,
+    color: Colors.light.gray,
   },
-  wordContainer: {
-    backgroundColor: GREEN,
-    width: 30,
-    height: 30,
+  instruction: {
+    fontSize: 14,
+    color: "#333",
+    marginTop: 5,
+  },
+  exampleSection: {
+    marginTop: 15,
+  },
+  exampleTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  wordRow: {
+    flexDirection: "row",
+    marginTop: 5,
+  },
+  tile: {
+    width: 40,
+    height: 40,
+    borderWidth: 1,
+    borderColor: "#ccc",
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
+    marginHorizontal: 2,
   },
-  WordContainer: {
-    marginLeft: 5,
-    width: 30,
-    height: 30,
+  correctTile: {
+    backgroundColor: Colors.light.green,
+    width: 40,
+    height: 40,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
+    marginHorizontal: 2,
+  },
+  presentTile: {
+    backgroundColor: Colors.light.yellow,
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 2,
+  },
+  absentTile: {
+    backgroundColor: "#999",
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 2,
+  },
+  tileText: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  tileTextDark: {
+    color: "#000",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  explanation: {
+    marginTop: 4,
+    fontSize: 14,
+  },
+  boldText: {
+    fontWeight: "bold",
+  },
+  rewardSection: {
+    marginTop: 15,
+  },
+  rewardTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  btnText: {
+    padding: 14,
+    fontSize: 16,
+    fontWeight: "semibold",
+    color: "#333",
+  },
+  primaryItem: {
+    backgroundColor: "#000",
+  },
+  primaryText: {
+    color: "#fff",
   },
 });
-
-export default InfoModal;
