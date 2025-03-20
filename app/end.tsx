@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from "react-native";
 import Icon from "@/assets/images/puzzle-icon.svg";
@@ -20,6 +21,7 @@ import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 const Page = () => {
   const loginModalRef = useRef<BottomSheetModal>(null);
+  const colorScheme = useColorScheme();
   const [loading, setLoading] = useState(true);
 
   const { win, word, gameField } = useLocalSearchParams<{
@@ -155,7 +157,10 @@ const Page = () => {
           flex: 1,
         }}
       >
-        <ActivityIndicator size="large" color="#000" />
+        <ActivityIndicator
+          size="large"
+          color={colorScheme === "dark" ? "#fff" : "#000"}
+        />
       </View>
     );
   }

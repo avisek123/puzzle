@@ -28,7 +28,7 @@ WebBrowser.maybeCompleteAuthSession();
 const LoginModal = forwardRef<Ref>((props, ref) => {
   useWarmUpBrowser();
   const { startSSOFlow } = useSSO();
-  const snapPoints = useMemo(() => ["40%"], []);
+  const snapPoints = useMemo(() => ["35%"], []);
   const { dismiss } = useBottomSheetModal();
 
   const onPress = useCallback(async () => {
@@ -95,7 +95,7 @@ const LoginModal = forwardRef<Ref>((props, ref) => {
             <Ionicons name="logo-google" size={24} style={styles.btnIcon} />
             <Text style={styles.btnOutlineText}>Continue with Google</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             disabled
             style={{
               ...styles.btnOutline,
@@ -105,7 +105,7 @@ const LoginModal = forwardRef<Ref>((props, ref) => {
           >
             <Ionicons name="logo-facebook" size={24} style={styles.btnIcon} />
             <Text style={styles.btnOutlineText}>Continue with Facebook</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={() => dismiss()}
             style={styles.btnOutlineOne}

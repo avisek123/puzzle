@@ -122,7 +122,10 @@ export default function Index() {
           flex: 1,
         }}
       >
-        <ActivityIndicator size="large" color="#000" />
+        <ActivityIndicator
+          size="large"
+          color={colorScheme === "light" ? "#000" : "#fff"}
+        />
       </View>
     );
   }
