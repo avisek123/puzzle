@@ -38,6 +38,8 @@ const LoginModal = forwardRef<Ref>((props, ref) => {
         strategy: "oauth_google",
       });
 
+      console.log("response", response);
+
       const { createdSessionId, setActive } = response;
 
       if (createdSessionId) {

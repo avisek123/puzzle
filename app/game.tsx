@@ -7,6 +7,7 @@ import OnScreenKeyboard, {
 import SettingsModal from "@/components/SettingsModal";
 import { Colors } from "@/constants/Colors";
 import { allWords } from "@/utils/allWord";
+import { storage } from "@/utils/storage";
 import { words } from "@/utils/targetWords";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
@@ -20,6 +21,7 @@ import {
   View,
   Text,
 } from "react-native";
+import { useMMKVBoolean } from "react-native-mmkv";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -318,7 +320,12 @@ const Page = () => {
   return (
     <View style={[styles.container, { backgroundColor }]}>
       {openModal && (
-        <InfoModal onClose={() => setOpenModal(false)} visible={openModal} />
+        <InfoModal
+          onClose={() => {
+            setOpenModal(false);
+          }}
+          visible={openModal}
+        />
       )}
       <Stack.Screen
         options={{

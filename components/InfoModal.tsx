@@ -114,7 +114,7 @@ const HowToPlayModal = ({ visible, onClose }: Props) => {
             <View style={styles.rewardSection}>
               <Text style={styles.rewardTitle}>🎉 Win & Get Rewarded! 🎁</Text>
               <Text style={styles.instruction}>
-                1. Win just 1 game and grab a{" "}
+                1. Win 2 consucative games and grab a{" "}
                 <Text
                   style={{
                     fontWeight: "bold",
@@ -131,7 +131,7 @@ const HowToPlayModal = ({ visible, onClose }: Props) => {
                     fontWeight: "bold",
                   }}
                 >
-                  ₹199
+                  ₹99
                 </Text>{" "}
                 Amazon voucher.
               </Text>

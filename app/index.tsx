@@ -11,7 +11,6 @@ import {
   BackHandler,
 } from "react-native";
 import Icon from "@/assets/images/puzzle-icon.svg";
-import { format } from "date-fns";
 import { Colors } from "@/constants/Colors";
 import ThemedText from "@/components/ThemedText";
 import { Link } from "expo-router";
@@ -35,11 +34,14 @@ import * as WebBrowser from "expo-web-browser";
 import * as AuthSession from "expo-auth-session";
 import { FIRESTORE_DB } from "@/utils/FirebaseConfig";
 import { doc, getDoc } from "@firebase/firestore";
+import { useMMKVBoolean } from "react-native-mmkv";
+import { storage } from "@/utils/storage";
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
 
 export default function Index() {
   const { user } = useUser();
+
   const [streak, setStreak] = useState<number | null>(null); // Initialize properly
   const { isLoaded, isSignedIn, signOut } = useAuth();
 
@@ -185,7 +187,7 @@ export default function Index() {
 
         {isSignedIn && (
           <ThemedText style={styles.footerText}>
-            {streak !== 0
+            {streak !== 0 && streak !== null
               ? `Current Streak: ${streak} 🔥`
               : "Start a streak now! 🚀"}
           </ThemedText>
